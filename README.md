@@ -1,23 +1,37 @@
-# ai-project
-A web application built with Python (Django/Flask) featuring REST APIs and clean architecture.
-import random
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
-responses = {
-    "hello": ["Hi!", "Hello there!", "Hey! 👋"],
-    "how are you": ["I'm fin
+<h2>🤖 AI Chatbot</h2>
 
-        if user == "exit":
-            print("🤖 AI Chatbot: Goodbye!")
-            break
+<div id="chatbox"></div>
 
-        found = False
-        for key in responses:
-            if key in user:
-                print("🤖 AI Chatbot:", random.choice(responses[key]))
-                found = True
-                break
+<input type="text" id="userInput" placeholder="Type a message...">
+<button onclick="sendMessage()">Send</button>
 
-        if not found:
-            print("🤖 AI Chatbot: Sorry, I didn't understand that 😅")
+<script>
+function sendMessage() {
+    let input = document.getElementById("userInput");
+    let message = input.value;
 
-chatbot()
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: message})
+    })
+    .then(res => res.json())
+    .then(data => {
+        let chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML += "<p><b>You:</b> " + message + "</p>";
+        chatbox.innerHTML += "<p><b>Bot:</b> " + data.reply + "</p>";
+        input.value = "";
+    });
+}
+</script>
+
+</body>
+</html>
